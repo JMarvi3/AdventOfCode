@@ -8,5 +8,5 @@ def current_puzzle():
     load_dotenv()
     main = __main__.__file__
     year = os.path.split(os.path.dirname(main))[1]
-    day = os.path.splitext(os.path.basename(main))[0]
+    day = os.path.splitext(os.path.basename(main))[0].split('_')[0]
     return Puzzle(int(year), int(day))
