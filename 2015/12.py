@@ -9,7 +9,7 @@ def object_sum(obj):
     elif isinstance(obj, list):
         return sum(object_sum(c) for c in obj)
     elif isinstance(obj, dict) and 'red' not in obj.values():
-        return sum(object_sum(value) for value in obj.values())
+        return sum(object_sum(key) + object_sum(value) for key, value in obj.items())
     else:
         return 0
 
