@@ -1,4 +1,5 @@
-from aocd.models import Puzzle
+from current_puzzle import current_puzzle
+import time
 
 
 def transpose(grid):
@@ -49,8 +50,10 @@ def process(grid):
     return join(grid)
 
 
+start = time.perf_counter_ns()
+
 patterns = dict()
-for line in Puzzle(2017, 21).input_data.splitlines():
+for line in current_puzzle().input_data.splitlines():
     left, right = line.split(" => ")
     patt = left.split('/')
     for _ in range(4):
@@ -68,3 +71,5 @@ print('Part1:', ''.join(grid).count('#'))
 for _ in range(13):
     grid = process(grid)
 print('Part2:', ''.join(grid).count('#'))
+
+print(f"Elapsed time: {(time.perf_counter_ns()-start)/1000000:.2f}ms")
