@@ -26,7 +26,7 @@ def find_collision(carts, tracks, part2=False):
                     curr_dir = (curr_dir + 1) % 4
                 state = (state + 1) % 3
             carts[pt] = (curr_dir, state)
-    return pt
+    return next(cart for cart in carts)
 
 
 puzzle = current_puzzle()
