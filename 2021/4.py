@@ -6,9 +6,10 @@ input_data = puzzle.input_data
 # input_data = open('4.example').read()
 
 
-def test_board(f):
-    return any(all(f[i][j] == False for i in range(5)) for j in range(5)) or \
-           any(all(f[j][i] == False for i in range(5)) for j in range(5))
+def test_board(board):
+    return any(all(board[i][j] is False for i in range(5)) or
+               all(board[j][i] is False for i in range(5))
+               for j in range(5))
 
 
 def dab(board, num):
@@ -19,6 +20,7 @@ def dab(board, num):
 
 
 def play(boards, nums, part2=False):
+    board = None
     all_boards = set(range(len(boards)))
     for num in nums:
         for board_num in set(all_boards):
@@ -26,10 +28,10 @@ def play(boards, nums, part2=False):
             dab(board, num)
             if test_board(board):
                 if not part2:
-                    return num, board
+                    return num * sum(map(sum, board))
                 all_boards.remove(board_num)
         if not all_boards:
-            return num, board
+            return num * sum(map(sum, board))
 
 
 input = input_data.split('\n\n')
@@ -40,12 +42,8 @@ for board_s in input[1:]:
 
 nums = list(map(int, input[0].split(',')))
 
-num, board = play(deepcopy(boards), nums)
-total = sum(board[i][j] for i in range(5) for j in range(5))
-puzzle.answer_a = num * total
+puzzle.answer_a = play(deepcopy(boards), nums)
 print('Part1:', puzzle.answer_a)
 
-num, board = play(boards, nums, part2=True)
-total = sum(board[i][j] for i in range(5) for j in range(5))
-puzzle.answer_b = total * num
+puzzle.answer_b = play(boards, nums, part2=True)
 print('Part2:', puzzle.answer_b)
