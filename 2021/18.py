@@ -1,5 +1,5 @@
 from current_puzzle import current_puzzle
-
+from copy import deepcopy
 
 class Literal:
     def __init__(self, value, parent=None):
@@ -117,9 +117,8 @@ def split(node):
 
 
 def reduce(node):
-    if explode(node):
-        return True
-    return split(node)
+    while explode(node) or split(node): pass
+    return
 
 
 puzzle = current_puzzle()
@@ -134,21 +133,21 @@ for line in input_data.splitlines():
 root = lines[0]
 for elem in lines[1:]:
     root = join(root, elem)
-    while reduce(root):
-        pass
+    reduce(root)
 
 # print(int(root))
 puzzle.answer_a = int(root)
 print('Part1:', puzzle.answer_a)
 
-lines = input_data.splitlines()
+lines = [parse(line)[0] for line in input_data.splitlines()]
 best_mag = 0
 for i in range(len(lines)):
     for j in range(len(lines)):
         if i != j:
-            root = join(parse(lines[i])[0], parse(lines[j])[0])
-            while reduce(root): pass
+            root = join(deepcopy(lines[i]), deepcopy(lines[j]))
+            reduce(root)
             best_mag = max(best_mag, int(root))
+
 # print(best_mag)
 puzzle.answer_b = best_mag
 print('Part2:', puzzle.answer_b)
