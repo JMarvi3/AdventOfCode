@@ -5,3 +5,4 @@ z3-solver~=4.8.13.0
 networkx~=2.6.3
 numpy~=1.21.4
 pygame~=2.1.0
+joblib~=1.2.0
