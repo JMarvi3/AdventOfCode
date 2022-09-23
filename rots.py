@@ -1,14 +1,24 @@
 from numpy import array, identity
 
 # https://www.euclideanspace.com/maths/discrete/groups/categorise/finite/cube/index.htm
-perms = ['x', 'y', 'xx', 'xy', 'yx', 'yy', 'xxx', 'xxy', 'xyx', 'xyy', 'yxx', 'yyx', 'yyy',
-          'xxxy', 'xxyx', 'xxyy', 'xyxx', 'xyyy', 'yxxx', 'yyyx', 'xxxyx', 'xyxxx', 'xyyyx']
-rotations = {'x': array([[1, 0, 0], [0, 0, -1], [0, 1, 0]]), 'y': array([[0, 0, -1], [0, 1, 0], [1, 0, 0]])}
+# perms = ['x', 'y', 'xx', 'xy', 'yx', 'yy', 'xxx', 'xxy', 'xyx', 'xyy', 'yxx', 'yyx', 'yyy',
+#           'xxxy', 'xxyx', 'xxyy', 'xyxx', 'xyyy', 'yxxx', 'yyyx', 'xxxyx', 'xyxxx', 'xyyyx']
+
+perms = ['', 'z', 'zz', 'zzz',
+         'yy', 'yyz', 'yyzz', 'yyzzz',
+         'x', 'xy', 'xyy', 'xyyy',
+         'xxx', 'xxxy', 'xxxyy', 'xxxyyy',
+         'y', 'yx', 'yxx', 'yxxx',
+         'yyy', 'yyyx', 'yyyxx', 'yyyxxx']
+
+rotations = {'x': array([[1, 0, 0], [0, 0, -1], [0, 1, 0]]),
+             'y': array([[0, 0, -1], [0, 1, 0], [1, 0, 0]]),
+             'z': array([[0, -1, 0], [1, 0, 0], [0, 0, 1]])}
 possible_rots = None
 
 
 def get_orthogonal_rotation_matrices():
-    rots = [identity(3)]
+    rots = []
     for perm in perms:
         m = identity(3)
         for c in perm:
