@@ -1,8 +1,12 @@
 from current_puzzle import current_puzzle
 import aoc_lib
+import more_itertools
+from functools import reduce
 
 
-def priority(item):
+def priority(s):
+    assert len(s) == 1
+    item = s.pop()
     if item > 'Z':
         return ord(item) - ord('a') + 1
     else:
@@ -14,14 +18,20 @@ print(puzzle.title)
 input_data = puzzle.input_data
 elves = input_data.split('\n')
 
+
+# total = sum(priority(reduce(set.intersection, map(set, more_itertools.divide(2, elf)))) for elf in elves)
+# part2_total = sum(priority(reduce(set.intersection, map(set, group))) for group in more_itertools.chunked(elves, 3))
+
 total = 0
-for line in elves:
-    total += priority(set(line[:len(line)//2]).intersection(set(line[len(line)//2:])).pop())
+for elf in elves:
+    half_len = len(elf)//2
+    common = set(elf[:half_len]).intersection(elf[half_len:])
+    total += priority(common)
 
 part2_total = 0
 for i in range(0, len(elves), 3):
-    items1, items2, items3 = elves[i], elves[i+1], elves[i+2]
-    part2_total += priority(set(items1).intersection(set(items2).intersection(set(items3))).pop())
+    common = set(elves[i]).intersection(elves[i + 1], elves[i + 2])
+    part2_total += priority(common)
 
 puzzle.answer_a = total
 print('Part1:', puzzle.answer_a)
