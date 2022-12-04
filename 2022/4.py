@@ -1,4 +1,5 @@
 from current_puzzle import current_puzzle
+import parse
 import aoc_lib
 
 puzzle = current_puzzle()
@@ -9,8 +10,8 @@ input_data = puzzle.input_data
 count = 0
 part2_count = 0
 for line in input_data.split('\n'):
-    s = line.split(',')
-    a, b, c, d = map(int, s[0].split('-') + s[1].split('-'))
+    a, b, c, d = map(int, line.replace('-', ',').split(','))
+    # a, b, c, d = parse.parse('{:d}-{:d},{:d}-{:d}', line).fixed
     if (a <= c and d <= b) or (c <= a and b <= d):
         count += 1
     if not ((a < d and c > b) or (c < b and d < a)):
