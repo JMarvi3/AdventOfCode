@@ -17,7 +17,7 @@ for line in input_data.splitlines():
             elif file == '/':
                 curr_path = ['']
             else:
-                curr_path.append('/'.join(curr_path[1:] + [file]))
+                curr_path.append(curr_path[-1] + '/' + file)
     else:
         size, file = line_parts
         if size.isnumeric():
