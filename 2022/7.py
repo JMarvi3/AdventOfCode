@@ -17,12 +17,13 @@ for line in input_data.splitlines():
             elif file == '/':
                 curr_path = ['']
             else:
-                curr_path.append(curr_path[-1] + '/' + file)
+                curr_path.append(file)
     else:
         size, file = line_parts
         if size.isnumeric():
             size = int(size)
-            for path in curr_path:
+            for i in range(len(curr_path)):
+                path = '/'.join(curr_path[:i+1])
                 dirs[path] += size
 
 part1 = sum(v for v in dirs.values() if v <= 100_000)
