@@ -9,66 +9,46 @@ for y, row in enumerate(input_data.splitlines()):
     for x, col in enumerate(row):
         trees[(x, y)] = int(col)
 
-visible = set()
 max_x, max_y = x, y
-for y in range(max_y + 1):
-    max_v = -1
-    for x in range(max_x + 1):
-        if trees[(x, y)] > max_v:
-            max_v = trees[(x, y)]
-            visible.add((x, y))
-    max_v = -1
-    for x in range(max_x, -1, -1):
-        if trees[(x, y)] > max_v:
-            max_v = trees[(x, y)]
-            visible.add((x, y))
 
-for x in range(max_x + 1):
-    max_v = -1
-    for y in range(max_y, -1, -1):
-        if trees[(x, y)] > max_v:
-            max_v = trees[(x, y)]
-            visible.add((x, y))
-    max_v = -1
-    for y in range(max_y + 1):
-        if trees[(x, y)] > max_v:
-            max_v = trees[(x, y)]
-            visible.add((x, y))
 
-# for y in range(max_y+1):
-#     print(''.join('*' if (x,y) in visible else '.' for x in range(max_x+1)))
+def scan(x_min, x_max, x_stride, y_min, y_max, y_stride):
+    max_v = -1
+    for x in range(x_min, x_max, x_stride):
+        for y in range(y_min, y_max, y_stride):
+            if trees[(x,y)] > max_v:
+                max_v = trees[(x, y)]
+                visible.add((x, y))
+
+
+visible = set()
+for y in range(max_y+1):
+    scan(0, max_x+1, 1, y, y+1, 1)
+    scan(max_x, -1, -1, y, y+1, 1)
+for x in range(max_x+1):
+    scan(x, x+1, 1, 0, max_y+1, 1)
+    scan(x, x+1, 1, max_y, -1, -1)
 
 puzzle.answer_a = len(visible)
 print('Part1:', puzzle.answer_a)
 
 
 def ray(x, y):
+    def look_out(x_min, x_max, x_stride, y_min, y_max, y_stride):
+        max_range = 0
+        for x1 in range(x_min, x_max, x_stride):
+            for y1 in range(y_min, y_max, y_stride):
+                max_range += 1
+                if trees[(x1, y1)] >= height:
+                    return max_range
+        return max_range
+
     score = 1
     height = trees[(x, y)]
-    max_range = 0
-    for y1 in range(y - 1, -1, -1):
-        max_range += 1
-        if trees[(x, y1)] >= height:
-            break
-    score *= max_range
-    max_range = 0
-    for y1 in range(y + 1, max_y + 1):
-        max_range += 1
-        if trees[(x, y1)] >= height:
-            break
-    score *= max_range
-    max_range = 0
-    for x1 in range(x - 1, -1, -1):
-        max_range += 1
-        if trees[(x1, y)] >= height:
-            break
-    score *= max_range
-    max_range = 0
-    for x1 in range(x + 1, max_x + 1):
-        max_range += 1
-        if trees[(x1, y)] >= height:
-            break
-    score *= max_range
+    score *= look_out(x, x+1, 1, y-1, -1, -1)
+    score *= look_out(x, x+1, 1, y+1, max_y+1, 1)
+    score *= look_out(x-1, -1, -1, y, y+1, 1)
+    score *= look_out(x+1, max_x+1, 1, y, y+1, 1)
     return score
 
 
