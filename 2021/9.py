@@ -31,3 +31,12 @@ sizes = sorted(map(len, networkx.connected_components(g)))
 
 puzzle.answer_b = functools.reduce(operator.mul, sizes[-3:])
 print('Part2:', puzzle.answer_b)
+
+from operator import mul
+from functools import reduce
+from networkx import Graph, connected_components
+
+heights = {x+y*1j: int(c) for y, row in enumerate(input_data.splitlines()) for x, c in enumerate(row) if c != '9'}
+part2, part1 = zip(*sorted((len(comp), min(heights[pt] for pt in comp)) for comp in connected_components(Graph((pt, (pt+d)) for d in {-1j, 1, 1j, -1} for pt in heights if pt+d in heights))))
+print(sum(part1)+len(part1), reduce(mul, part2[-3:]))
+
