@@ -1,6 +1,7 @@
 from collections import deque
 from current_puzzle import current_puzzle
 import aoc_lib
+from time import perf_counter
 
 puzzle = current_puzzle()
 print(puzzle.title)
@@ -47,3 +48,24 @@ min_path = min(dfs(pt, goal) for pt in grid if grid[pt] == 'a')
 # print(min_path)
 puzzle.answer_b = min_path
 print('Part2:', puzzle.answer_b)
+
+# # Faster and cleaner
+# import networkx
+#
+# grid = input_data.splitlines()
+# COLS, ROWS = range(len(grid[0])), range(len(grid))
+# height = {k: ord(v) for k, v in zip('SEabcdefghijklmnopqrstuvwxyz', 'azabcdefghijklmnopqrstuvwxyz')}
+# g = networkx.DiGraph()
+# for x in COLS:
+#     for y in ROWS:
+#         if grid[y][x] == 'S':
+#             start = (x, y)
+#         elif grid[y][x] == 'E':
+#             end = (x, y)
+#         for new_x, new_y in (aoc_lib.add_pts((x, y), d) for d in aoc_lib.dirs):
+#             if new_x in COLS and new_y in ROWS:
+#                 g.add_edge((x, y), (new_x, new_y), climb=height[grid[new_y][new_x]] - height[grid[y][x]])
+# g.remove_edges_from([edge for edge in g.edges(data=True) if edge[2]['climb'] > 1])
+# paths = networkx.shortest_path_length(g, target=end)
+# print(f"Part1: {paths[start]}")
+# print(f"Part2: {min(v for (x, y), v in paths.items() if grid[y][x] == 'a')}")
